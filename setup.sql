@@ -1,18 +1,15 @@
--- Criação do banco de dados
-CREATE DATABASE IF NOT EXISTS `hqverso` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `hqsql` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE `hqverso`;
+USE `hqsql`;
 
 -- Tabela de quadrinhos
 CREATE TABLE IF NOT EXISTS `comics` (
-  `id` varchar(50) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `author` varchar(100) NOT NULL,
-  `year` int(4) DEFAULT NULL,
-  `cover` varchar(255) DEFAULT NULL,
-  `categories` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `author` VARCHAR(255),
+  `cover` VARCHAR(255),
+  `description` TEXT,
+  `category` VARCHAR(100)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabela de páginas
@@ -52,12 +49,11 @@ CREATE TABLE IF NOT EXISTS `reading_progress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dados iniciais (exemplos)
-INSERT INTO `comics` (`id`, `title`, `author`, `year`, `cover`, `categories`, `description`) VALUES
-('batman-cavaleiro-das-trevas', 'Batman: O Cavaleiro das Trevas', 'Frank Miller', 1986, 'batman-cover.jpg', 'super-heroi,dc-comics,classico', 'A revolucionária graphic novel que redefiniu o Batman.'),
-
-('watchmen', 'Watchmen', 'Alan Moore', 1986, 'watchmen-cover.jpg', 'super-heroi,dc-comics,graphic-novel', 'A obra-prima de Alan Moore que reinventou os super-heróis.');
+INSERT INTO `comics` (`title`, `author`, `cover`, `category`, `description`) VALUES
+('Batman: O Cavaleiro das Trevas', 'Frank Miller', 'batman-cover.jpg', 'super-heroi,dc-comics,classico', 'A revolucionária graphic novel que redefiniu o Batman.'),
+('Watchmen', 'Alan Moore', 'watchmen-cover.jpg', 'super-heroi,dc-comics,graphic-novel', 'A obra-prima de Alan Moore que reinventou os super-heróis.');
 
 INSERT INTO `comic_pages` (`comic_id`, `page_number`, `image_url`) VALUES
-('batman-cavaleiro-das-trevas', 1, 'batman/page1.jpg'),
-('batman-cavaleiro-das-trevas', 2, 'batman/page2.jpg'),
-('watchmen', 1, 'watchmen/page1.jpg');
+(1, 1, 'batman/page1.jpg'),
+(1, 2, 'batman/page2.jpg'),
+(2, 1, 'watchmen/page1.jpg');
