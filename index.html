@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HQ Verso - Sua plataforma de quadrinhos online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e94560;
+            --secondary: #0f3460;
+            --dark: #16213e;
+            --light: #f6f6f6;
+            --gray: #b2bec3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--light);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #d13354;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--light);
+            border: 1px solid var(--light);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Página de Quadrinhos - CORRIGIDO: removido display: none */
+        .comics-page {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .comics-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .comics-carousel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--dark);
+        }
+        
+        .comics-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .comics-carousel::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+        .comics-carousel::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 20px;
+        }
+        
+        .comic-card {
+            min-width: 200px;
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .comic-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .comic-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .comic-info {
+            padding: 15px;
+        }
+        
+        .comic-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .comic-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .featured-comic {
+            width: 100%;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        
+        .featured-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        
+        .featured-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            color: var(--light);
+            outline: none;
+        }
+        
+        .search-bar button {
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .category {
+            padding: 8px 15px;
+            background-color: #333;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category:hover, .category.active {
+            background-color: var(--primary);
+        }
+
+        /* Modal de Login/Cadastro */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--dark);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: var(--light);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            color: var(--light);
+            outline: none;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Mensagens de status */
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .welcome-message h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .welcome-message p {
+            margin-bottom: 20px;
+            color: var(--gray);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #ff6b6b;
+        }
+        
+        .success-message {
+            color: #51cf66;
+            background: rgba(81, 207, 102, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #51cf66;
+        }
+        
+        .db-error {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ff6b6b;
+            text-align: center;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .featured-comic {
+                height: 400px;
+            }
+            
+            .featured-title {
+                font-size: 1.8rem;
+            }
+            
+            .featured-overlay {
+                padding: 20px;
+            }
+            
+            .user-menu {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .featured-comic {
+                height: 300px;
+            }
+            
+            .featured-title {
+                font-size: 1.5rem;
+            }
+            
+            .featured-actions {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .comic-card {
+                min-width: 150px;
+            }
+            
+            .comic-cover {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Quadrinhos -->
+    <div class="container comics-page" id="comicsPage">
+        <header>
+            <a href="#" class="logo">HQ VERSO</a>
+            <div class="user-menu">
+                <div class="search-bar">
+                    <input type="text" placeholder="Buscar quadrinhos...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <span>Olá, Leitor</span>
+                    <a href="#" class="btn btn-outline" style="margin-left: 10px;">Sair</a>
+                </div>
+                <div class="user-avatar" id="userAvatar">L</div>
+            </div>
+        </header>
+        
+        <div class="categories">
+            <div class="category active">Todos</div>
+            <div class="category">Super-heróis</div>
+            <div class="category">Mangá</div>
+            <div class="category">Graphic Novels</div>
+            <div class="category">Clássicos</div>
+            <div class="category">Indie</div>
+            <div class="category">Favoritos</div>
+        </div>
+        
+        <!-- Destaque -->
+        <div class="featured-comic" style="background-image: url('https://images.unsplash.com/photo-1635863138275-d9b33299680a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+            <div class="featured-overlay">
+                <h2 class="featured-title">Batman: O Cavaleiro das Trevas</h2>
+                <p>A revolucionária graphic novel que redefiniu o Batman. Gotham City está em perigo e apenas o Cavaleiro das Trevas pode salvá-la.</p>
+                <div class="featured-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play"></i> Ler agora
+                    </button>
+                    <button class="btn btn-outline"><i class="fas fa-plus"></i> Minha lista</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de quadrinhos -->
+        <div class="comics-section">
+            <h3 class="section-title">Nossa coleção</h3>
+            <div class="comics-carousel">
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1635863138275-d9b33299680a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batman" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Batman: O Cavaleiro das Trevas</div>
+                        <div class="comic-meta">Frank Miller</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1629992101753-56d196c8aabb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Watchmen" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Watchmen</div>
+                        <div class="comic-meta">Alan Moore</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1580477667995-2b94f01c9516?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Sandman" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Sandman</div>
+                        <div class="comic-meta">Neil Gaiman</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Superman" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Superman: Entre a Foice e o Martelo</div>
+                        <div class="comic-meta">Mark Millar</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="X-Men" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">X-Men: Dias de Um Futuro Esquecido</div>
+                        <div class="comic-meta">Chris Claremont</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comics-section">
+            <h3 class="section-title">Recomendados para você</h3>
+            <div class="comics-carousel">
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 1" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">V de Vingança</div>
+                        <div class="comic-meta">Alan Moore</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1560415752-7ee9d53e5e0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 2" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Hellboy</div>
+                        <div class="comic-meta">Mike Mignola</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 3" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Mulher-Maravilha</div>
+                        <div class="comic-meta">George Pérez</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 4" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Os Supersons</div>
+                        <div class="comic-meta">Peter J. Tomasi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Login/Cadastro -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="login">Entrar</div>
+                <div class="tab" data-tab="signup">Cadastrar</div>
+            </div>
+            
+            <div class="tab-content active" id="login">
+                <h2>Entrar na HQ Verso</h2>
+                <form id="loginForm" method="POST">
+                    <input type="hidden" name="login" value="1">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+            
+            <div class="tab-content" id="signup">
+                <h2>Criar conta na HQ Verso</h2>
+                <form id="signupForm" method="POST">
+                    <input type="hidden" name="signup" value="1">
+                    <div class="form-group">
+                        <label for="signupName">Nome</label>
+                        <input type="text" id="signupName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Senha</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirmar Senha</label>
+                        <input type="password" id="signupConfirmPassword" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal de Login/Cadastro
+        const authModal = document.getElementById('authModal');
+        const closeBtn = document.querySelector('.close-btn');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Função para abrir/fechar modal
+        function toggleModal(modalId, show = true) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = show ? 'flex' : 'none';
+            document.body.style.overflow = show ? 'hidden' : 'auto';
+        }
+
+        // Fechar modal
+        closeBtn.addEventListener('click', () => {
+            toggleModal('authModal', false);
+        });
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) toggleModal('authModal', false);
+        });
+        
+        // Trocar entre abas
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remover classe active de todas as tabs e contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Adicionar classe active na tab e content selecionados
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Formulário de login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validação simples
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            // Simular login bem-sucedido
+            alert('Login realizado com sucesso!');
+            toggleModal('authModal', false);
+        });
+        
+        // Formulário de cadastro
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            // Validações
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+            
+            // Simular cadastro bem-sucedido
+            alert('Conta criada com sucesso! Faça login.');
+            
+            // Mudar para a aba de login após cadastro
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            tabs[0].classList.add('active');
+            tabContents[0].classList.add('active');
+            
+            // Limpar formulários
+            document.getElementById('signupForm').reset();
+        });
+
+        // Categorias - filtro
+        document.querySelectorAll('.category').forEach(category => {
+            category.addEventListener('click', function() {
+                document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui iria a lógica para filtrar os quadrinhos
+                alert(`Filtrando por: ${this.textContent}`);
+            });
+        });
+
+        // Barra de pesquisa
+        document.querySelector('.search-bar button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-bar input').value;
+            if (searchTerm) {
+                alert(`Buscando por: ${searchTerm}`);
+                // Aqui iria a lógica de busca
+            }
+        });
+
+        // Permitir busca ao pressionar Enter
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-bar button').click();
+            }
+        });
+
+        // Botões de ação nos quadrinhos
+        document.querySelectorAll('.comic-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.comic-title').textContent;
+                alert(`Abrindo quadrinho: ${title}`);
+            });
+        });
+
+        // Botão "Ler agora" no destaque
+        document.querySelector('.featured-actions .btn-primary').addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('Redirecionando para o leitor...');
+        });
+
+        // Botão "Minha lista" no destaque
+        document.querySelector('.featured-actions .btn-outline').addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('Adicionado à sua lista!');
+        });
+    </script>
+</body>
+</html>
