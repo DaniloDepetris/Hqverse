@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         elseif ($_GET['action'] === 'category' && isset($_GET['category'])) {
             // Buscar por categoria
             $category = '%' . $_GET['category'] . '%';
-            $stmt = $pdo->prepare("SELECT * FROM comics WHERE categories LIKE ?");
+            $stmt = $pdo->prepare("SELECT * FROM comics WHERE category LIKE ?");
             $stmt->execute([$category]);
             $comics = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
