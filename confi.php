@@ -1,7 +1,7 @@
 <?php
 // config.php
 $host = 'localhost';
-$dbname = 'hqverso';
+$dbname = 'hqsql';
 $username = 'root';
 $password = '';
 
