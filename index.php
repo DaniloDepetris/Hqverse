@@ -28,8 +28,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 }
 
 // Processa login
+// Corrigido: verifica se REQUEST_METHOD está definido
 $login_error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 // Processa cadastro
 $signup_error = '';
 $signup_success = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -94,6 +95,39 @@ if (isset($pdo)) {
         $db_error = "Erro ao carregar quadrinhos: " . $e->getMessage();
     }
 }
+
+// Adicionando quadrinhos iniciais
+$initial_comics = [
+    [
+        'title' => 'Batman: O Cavaleiro das Trevas',
+        'author' => 'Frank Miller',
+        'cover' => 'batman-cover.jpg',
+        'category' => 'super-heroi,dc-comics,classico',
+        'description' => 'A revolucionária graphic novel que redefiniu o Batman.'
+    ],
+    [
+        'title' => 'Watchmen',
+        'author' => 'Alan Moore',
+        'cover' => 'watchmen-cover.jpg',
+        'category' => 'super-heroi,dc-comics,graphic-novel',
+        'description' => 'A obra-prima de Alan Moore que reinventou os super-heróis.'
+    ]
+];
+
+// Inserir quadrinhos iniciais no banco de dados se a tabela estiver vazia
+try {
+    $stmt = $pdo->query("SELECT COUNT(*) FROM comics");
+    $count = $stmt->fetchColumn();
+    
+    if ($count == 0) {
+        $stmt = $pdo->prepare("INSERT INTO comics (title, author, cover, category, description) VALUES (?, ?, ?, ?, ?)");
+        foreach ($initial_comics as $comic) {
+            $stmt->execute([$comic['title'], $comic['author'], $comic['cover'], $comic['category'], $comic['description']]);
+        }
+    }
+} catch(PDOException $e) {
+    $db_error = "Erro ao verificar/inserir quadrinhos iniciais: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +136,6 @@ if (isset($pdo)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQ Verso - Sua plataforma de quadrinhos online</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #e94560;
@@ -1428,7 +1461,7 @@ async function loadComics(category = 'all') {
 // Ao carregar a página
 document.addEventListener('DOMContentLoaded', async () => {
     const comics = await loadComics();
-    renderComics(comics); // Você precisa implementar esta função
+    renderComics(comics);
 });
 
 // Quando o usuário seleciona uma categoria
@@ -1439,6 +1472,29 @@ document.querySelectorAll('.category').forEach(category => {
         renderComics(comics);
     });
 });
+
+// Função para exibir quadrinhos na página
+function renderComics(comics) {
+    const container = document.getElementById('comics-container');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!comics || comics.length === 0) {
+        container.innerHTML = '<p>Nenhum quadrinho encontrado.</p>';
+        return;
+    }
+    comics.forEach(comic => {
+        const div = document.createElement('div');
+        div.className = 'comic-card';
+        div.innerHTML = `
+            <h3>${comic.title}</h3>
+            <p>Autor: ${comic.author}</p>
+            <p>Ano: ${comic.year}</p>
+            <img src="${comic.cover}" alt="Capa" style="max-width:150px;">
+            <p>${comic.description || ''}</p>
+        `;
+        container.appendChild(div);
+    });
+}
     </script>
 </body>
 </html>
