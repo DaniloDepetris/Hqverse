@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `comics` (
 -- Tabela de páginas
 CREATE TABLE IF NOT EXISTS `comic_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `comic_id` varchar(50) NOT NULL,
+  `comic_id` int(11) NOT NULL,
   `page_number` int(11) NOT NULL,
   `image_url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `reading_progress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `comic_id` varchar(50) NOT NULL,
+  `comic_id` int(11) NOT NULL,
   `current_page` int(11) NOT NULL DEFAULT 1,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
