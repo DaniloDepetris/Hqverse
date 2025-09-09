@@ -4,11 +4,693 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQ Verso - Sua plataforma de quadrinhos online</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e94560;      /* Vermelho manga */
+            --secondary: #0f3460;    /* Azul escuro */
+            --dark: #16213e;         /* Azul profundo */
+            --light: #f6f6f6;        /* Branco manga */
+            --gray: #b2bec3;         /* Cinza claro */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--light);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #d13354;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--light);
+            border: 1px solid var(--light);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+        }
+        
+        /* Página de Quadrinhos */
+        .comics-page {
+            display: none;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .comics-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .comics-carousel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--dark);
+        }
+        
+        .comics-carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .comics-carousel::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+        .comics-carousel::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 20px;
+        }
+        
+        .comic-card {
+            min-width: 200px;
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .comic-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .comic-cover {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .comic-info {
+            padding: 15px;
+        }
+        
+        .comic-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .comic-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .featured-comic {
+            width: 100%;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        
+        .featured-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .featured-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin: 20px 0;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            color: var(--light);
+            outline: none;
+        }
+        
+        .search-bar button {
+            padding: 12px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .category {
+            padding: 8px 15px;
+            background-color: #333;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category:hover, .category.active {
+            background-color: var(--primary);
+        }
+
+        /* Modal de Login/Cadastro */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--dark);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: var(--light);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            color: var(--light);
+            outline: none;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Modal Netflix */
+        .netflix-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .netflix-modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .netflix-hero {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 0 60px 60px;
+            margin-bottom: 40px;
+        }
+
+        .netflix-hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to top, var(--dark), transparent);
+        }
+
+        .netflix-hero-info {
+            position: relative;
+            z-index: 2;
+            max-width: 50%;
+        }
+
+        .netflix-hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .netflix-hero-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .netflix-hero-description {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .netflix-metadata {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .netflix-match {
+            color: #46d369;
+            font-weight: bold;
+        }
+
+        .netflix-age-rating {
+            padding: 2px 5px;
+            border: 1px solid var(--gray);
+            border-radius: 2px;
+        }
+
+        .netflix-section {
+            margin-bottom: 40px;
+        }
+
+        .netflix-section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .netflix-more-like-this {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .netflix-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .netflix-close-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .netflix-tabs {
+            display: flex;
+            border-bottom: 1px solid #404040;
+            margin-bottom: 30px;
+        }
+
+        .netflix-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--gray);
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .netflix-tab.active {
+            color: white;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .netflix-tab-content {
+            display: none;
+        }
+
+        .netflix-tab-content.active {
+            display: block;
+        }
+
+        .netflix-cast {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--dark);
+        }
+
+        .netflix-cast::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .netflix-cast::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+        .netflix-cast::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 20px;
+        }
+
+        .netflix-cast-item {
+            min-width: 120px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .netflix-cast-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            background-color: #333;
+        }
+
+        .netflix-cast-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .netflix-cast-character {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .netflix-episodes {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .netflix-episode {
+            display: flex;
+            gap: 20px;
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .netflix-episode-thumbnail {
+            width: 300px;
+            height: 150px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .netflix-episode-info {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .netflix-episode-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .netflix-episode-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .featured-comic {
+                height: 400px;
+            }
+            
+            .featured-title {
+                font-size: 1.8rem;
+            }
+            
+            .netflix-hero {
+                height: 50vh;
+                padding: 0 20px 40px 20px;
+            }
+            
+            .netflix-hero-info {
+                max-width: 100%;
+            }
+            
+            .netflix-hero-title {
+                font-size: 2rem;
+            }
+            
+            .netflix-hero-description {
+                font-size: 1rem;
+            }
+            
+            .netflix-modal-content {
+                padding: 60px 20px;
+            }
+            
+            .netflix-episode {
+                flex-direction: column;
+            }
+            
+            .netflix-episode-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .user-menu {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .featured-comic {
+                height: 300px;
+            }
+            
+            .featured-overlay {
+                padding: 15px;
+            }
+            
+            .featured-title {
+                font-size: 1.5rem;
+            }
+            
+            .featured-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .netflix-hero {
+                height: 40vh;
+                min-height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Página de Quadrinhos -->
+    <!-- Página de Planos (Inicial) -->
+    <div class="container" id="plansPage">
+        <header>
+            <a href="#" class="logo">HQ VERSO</a>
+            <a href="#" class="btn btn-outline" id="loginBtn">Entrar</a>
+        </header>
+        
+        <section class="hero">
+            <h1>Quadrinhos ilimitados online</h1>
+            <p>Assista onde quiser. Cancele quando quiser.</p>
+            <p>Pronto para mergulhar no universo HQ Verso? Faça seu login ou cadastro.</p>
+        </section>
+    </div>
+    
+    <!-- Página de Quadrinhos (Após login) -->
     <div class="container comics-page" id="comicsPage">
         <header>
             <a href="#" class="logo">HQ VERSO</a>
@@ -17,11 +699,7 @@
                     <input type="text" placeholder="Buscar quadrinhos...">
                     <button><i class="fas fa-search"></i></button>
                 </div>
-                <div class="user-info">
-                    <span>Olá, Leitor</span>
-                    <a href="#" class="btn btn-outline" style="margin-left: 10px;">Sair</a>
-                </div>
-                <div class="user-avatar" id="userAvatar">L</div>
+                <div class="user-avatar" id="userAvatar">U</div>
             </div>
         </header>
         
@@ -35,91 +713,176 @@
             <div class="category">Favoritos</div>
         </div>
         
-        <!-- Destaque -->
-        <div class="featured-comic" style="background-image: url('https://images.unsplash.com/photo-1635863138275-d9b33299680a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+        <div class="featured-comic" style="background-image: url('https://via.placeholder.com/1200x500')">
             <div class="featured-overlay">
                 <h2 class="featured-title">Batman: O Cavaleiro das Trevas</h2>
-                <p>A revolucionária graphic novel que redefiniu o Batman. Gotham City está em perigo e apenas o Cavaleiro das Trevas pode salvá-la.</p>
+                <p>A obra-prima de Frank Miller que redefiniu o Batman para sempre.</p>
                 <div class="featured-actions">
-                    <button class="btn btn-primary">
-                        <i class="fas fa-play"></i> Ler agora
-                    </button>
+                    <button class="btn btn-primary"><i class="fas fa-play"></i> Ler agora</button>
                     <button class="btn btn-outline"><i class="fas fa-plus"></i> Minha lista</button>
                 </div>
             </div>
         </div>
-
-        <!-- Lista de quadrinhos -->
+        
         <div class="comics-section">
-            <h3 class="section-title">Nossa coleção</h3>
+            <h3 class="section-title">Continuar lendo</h3>
             <div class="comics-carousel">
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1635863138275-d9b33299680a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Batman" class="comic-cover">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9az9jtGfQoj20u_4hUEeTQXvX9i0W2KPKw&s" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">Batman: O Cavaleiro das Trevas</div>
-                        <div class="comic-meta">Frank Miller</div>
+                        <div class="comic-title">Homem-Aranha: A Última Caçada</div>
+                        <div class="comic-meta">Capítulo 3</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1629992101753-56d196c8aabb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Watchmen" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
                         <div class="comic-title">Watchmen</div>
-                        <div class="comic-meta">Alan Moore</div>
+                        <div class="comic-meta">Página 45</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1580477667995-2b94f01c9516?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Sandman" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">Sandman</div>
-                        <div class="comic-meta">Neil Gaiman</div>
+                        <div class="comic-title">Sandman: Prelúdios e Noturnos</div>
+                        <div class="comic-meta">Volume 1</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Superman" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">Superman: Entre a Foice e o Martelo</div>
-                        <div class="comic-meta">Mark Millar</div>
+                        <div class="comic-title">V de Vingança</div>
+                        <div class="comic-meta">50% lido</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="X-Men" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">X-Men: Dias de Um Futuro Esquecido</div>
-                        <div class="comic-meta">Chris Claremont</div>
+                        <div class="comic-title">X-Men: Fênix Negra</div>
+                        <div class="comic-meta">Edição 135</div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="comics-section">
             <h3 class="section-title">Recomendados para você</h3>
             <div class="comics-carousel">
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 1" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">V de Vingança</div>
-                        <div class="comic-meta">Alan Moore</div>
+                        <div class="comic-title">Maus</div>
+                        <div class="comic-meta">Art Spiegelman</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1560415752-7ee9d53e5e0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 2" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Persépolis</div>
+                        <div class="comic-meta">Marjane Satrapi</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
                         <div class="comic-title">Hellboy</div>
                         <div class="comic-meta">Mike Mignola</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1584824486539-53bb4646bdbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 3" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">Mulher-Maravilha</div>
-                        <div class="comic-meta">George Pérez</div>
+                        <div class="comic-title">Saga</div>
+                        <div class="comic-meta">Brian K. Vaughan</div>
                     </div>
                 </div>
                 <div class="comic-card">
-                    <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Capa 4" class="comic-cover">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
                     <div class="comic-info">
-                        <div class="comic-title">Os Supersons</div>
-                        <div class="comic-meta">Peter J. Tomasi</div>
+                        <div class="comic-title">Monstress</div>
+                        <div class="comic-meta">Marjorie Liu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comics-section">
+            <h3 class="section-title">Clássicos da DC</h3>
+            <div class="comics-carousel">
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Superman: Terra Um</div>
+                        <div class="comic-meta">2010</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Liga da Justiça: A Torre de Babel</div>
+                        <div class="comic-meta">2000</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Mulher-Maravilha: Deuses e Mortais</div>
+                        <div class="comic-meta">1987</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Flashpoint</div>
+                        <div class="comic-meta">2011</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Arqueiro Verde: Ano Um</div>
+                        <div class="comic-meta">2007</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="comics-section">
+            <h3 class="section-title">Marvel Essentials</h3>
+            <div class="comics-carousel">
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Homem de Ferro: Extremis</div>
+                        <div class="comic-meta">2005</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Capitão América: O Soldado Invernal</div>
+                        <div class="comic-meta">2005</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Thor: Deus do Trovão</div>
+                        <div class="comic-meta">2012</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Doutor Estranho: O Juramento</div>
+                        <div class="comic-meta">2006</div>
+                    </div>
+                </div>
+                <div class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Capa do quadrinho" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Pantera Negra: Rei do Wakanda</div>
+                        <div class="comic-meta">2016</div>
                     </div>
                 </div>
             </div>
@@ -138,15 +901,14 @@
             
             <div class="tab-content active" id="login">
                 <h2>Entrar na HQ Verso</h2>
-                <form id="loginForm" method="POST">
-                    <input type="hidden" name="login" value="1">
+                <form id="loginForm">
                     <div class="form-group">
                         <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" name="email" required>
+                        <input type="email" id="loginEmail" required>
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Senha</label>
-                        <input type="password" id="loginPassword" name="password" required>
+                        <input type="password" id="loginPassword" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Entrar</button>
                 </form>
@@ -154,30 +916,425 @@
             
             <div class="tab-content" id="signup">
                 <h2>Criar conta na HQ Verso</h2>
-                <form id="signupForm" method="POST">
-                    <input type="hidden" name="signup" value="1">
+                <form id="signupForm">
                     <div class="form-group">
                         <label for="signupName">Nome</label>
-                        <input type="text" id="signupName" name="name" required>
+                        <input type="text" id="signupName" required>
                     </div>
                     <div class="form-group">
                         <label for="signupEmail">Email</label>
-                        <input type="email" id="signupEmail" name="email" required>
+                        <input type="email" id="signupEmail" required>
                     </div>
                     <div class="form-group">
                         <label for="signupPassword">Senha</label>
-                        <input type="password" id="signupPassword" name="password" required>
+                        <input type="password" id="signupPassword" required>
                     </div>
                     <div class="form-group">
                         <label for="signupConfirmPassword">Confirmar Senha</label>
-                        <input type="password" id="signupConfirmPassword" name="confirm_password" required>
+                        <input type="password" id="signupConfirmPassword" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                 </form>
             </div>
         </div>
     </div>
+    
+    <!-- Modal no estilo Netflix -->
+    <div class="netflix-modal" id="netflixModal">
+        <button class="netflix-close-btn" id="netflixCloseBtn">&times;</button>
+        <div class="netflix-modal-content">
+            <div class="netflix-hero" id="netflixHero">
+                <div class="netflix-hero-info">
+                    <h1 class="netflix-hero-title" id="netflixTitle">Batman: O Cavaleiro das Trevas</h1>
+                    <div class="netflix-hero-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play"></i> Ler Agora
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-plus"></i> Minha Lista
+                        </button>
+                    </div>
+                    <div class="netflix-metadata">
+                        <span class="netflix-match">98% relevante</span>
+                        <span class="netflix-age-rating">16+</span>
+                        <span>2023</span>
+                        <span>4 volumes</span>
+                    </div>
+                    <p class="netflix-hero-description" id="netflixDescription">
+                        A obra-prima de Frank Miller que redefiniu o Batman para sempre. Gotham está em perigo e só um Batman mais velho e sombrio pode salvar a cidade.
+                    </p>
+                </div>
+            </div>
 
-    <script src="script.js"></script>
+            <div class="netflix-tabs">
+                <div class="netflix-tab active" data-tab="about">Sobre</div>
+                <div class="netflix-tab" data-tab="volumes">Volumes</div>
+                <div class="netflix-tab" data-tab="details">Detalhes</div>
+            </div>
+
+            <div class="netflix-tab-content active" id="about">
+                <div class="netflix-section">
+                    <h3 class="netflix-section-title">Elenco</h3>
+                    <div class="netflix-cast">
+                        <div class="netflix-cast-item">
+                            <img src="https://via.placeholder.com/100x100" alt="Frank Miller" class="netflix-cast-photo">
+                            <div class="netflix-cast-name">Frank Miller</div>
+                            <div class="netflix-cast-character">Escritor</div>
+                        </div>
+                        <div class="netflix-cast-item">
+                            <img src="https://via.placeholder.com/100x100" alt="Klaus Janson" class="netflix-cast-photo">
+                            <div class="netflix-cast-name">Klaus Janson</div>
+                            <div class="netflix-cast-character">Artista</div>
+                        </div>
+                        <div class="netflix-cast-item">
+                            <img src="https://via.placeholder.com/100x100" alt="Lynn Varley" class="netflix-cast-photo">
+                            <div class="netflix-cast-name">Lynn Varley</div>
+                            <div class="netflix-cast-character">Colorista</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="netflix-section">
+                    <h3 class="netflix-section-title">Mais como este</h3>
+                    <div class="comics-carousel">
+                        <div class="comic-card">
+                            <img src="https://via.placeholder.com/200x300" alt="Batman: Ano Um" class="comic-cover">
+                            <div class="comic-info">
+                                <div class="comic-title">Batman: Ano Um</div>
+                                <div class="comic-meta">Frank Miller</div>
+                            </div>
+                        </div>
+                        <div class="comic-card">
+                            <img src="https://via.placeholder.com/200x300" alt="Batman: O Longo Dia das Bruxas" class="comic-cover">
+                            <div class="comic-info">
+                                <div class="comic-title">Batman: O Longo Dia das Bruxas</div>
+                                <div class="comic-meta">Jeph Loeb</div>
+                            </div>
+                        </div>
+                        <div class="comic-card">
+                            <img src="https://via.placeholder.com/200x300" alt="Batman: A Piada Mortal" class="comic-cover">
+                            <div class="comic-info">
+                                <div class="comic-title">Batman: A Piada Mortal</div>
+                                <div class="comic-meta">Alan Moore</div>
+                            </div>
+                        </div>
+                        <div class="comic-card">
+                            <img src="https://via.placeholder.com/200x300" alt="Batman: Silêncio" class="comic-cover">
+                            <div class="comic-info">
+                                <div class="comic-title">Batman: Silêncio</div>
+                                <div class="comic-meta">Jeph Loeb</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="netflix-tab-content" id="volumes">
+                <div class="netflix-section">
+                    <h3 class="netflix-section-title">Volumes</h3>
+                    <div class="netflix-episodes">
+                        <div class="netflix-episode">
+                            <img src="https://via.placeholder.com/300x150" alt="Volume 1" class="netflix-episode-thumbnail">
+                            <div class="netflix-episode-info">
+                                <h4 class="netflix-episode-title">Volume 1: O Cavaleiro das Trevas</h4>
+                                <p class="netflix-episode-description">
+                                    Batman retorna após 10 anos de aposentadoria para enfrentar uma gangue de mutantes que aterroriza Gotham City.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="netflix-episode">
+                            <img src="https://via.placeholder.com/300x150" alt="Volume 2" class="netflix-episode-thumbnail">
+                            <div class="netflix-episode-info">
+                                <h4 class="netflix-episode-title">Volume 2: A Queda do Morcego</h4>
+                                <p class="netflix-episode-description">
+                                    Batman enfrenta o Coringa em um confronto final que mudará para sempre sua relação com o arqui-inimigo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="netflix-tab-content" id="details">
+                <div class="netflix-section">
+                    <h3 class="netflix-section-title">Detalhes</h3>
+                    <div class="netflix-more-like-this">
+                        <div>
+                            <strong>Editora:</strong> DC Comics
+                        </div>
+                        <div>
+                            <strong>Data de publicação:</strong> 1986
+                        </div>
+                        <div>
+                            <strong>Páginas:</strong> 224
+                        </div>
+                        <div>
+                            <strong>Formato:</strong> Graphic Novel
+                        </div>
+                        <div>
+                            <strong>Gêneros:</strong> Super-herói, Ação, Drama
+                        </div>
+                        <div>
+                            <strong>Prêmios:</strong> Eisner Award, Harvey Award
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal de Login/Cadastro
+        const loginBtn = document.getElementById('loginBtn');
+        const authModal = document.getElementById('authModal');
+        const closeBtn = document.querySelector('.close-btn');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const plansPage = document.getElementById('plansPage');
+        const comicsPage = document.getElementById('comicsPage');
+        const userAvatar = document.getElementById('userAvatar');
+        
+        // Abrir modal
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            authModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Fechar modal
+        closeBtn.addEventListener('click', () => {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Trocar entre abas
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remover classe active de todas as tabs e contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Adicionar classe active na tab e content selecionados
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Formulário de login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Validação simples
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            // Simular login bem-sucedido
+            simulateLogin(email);
+        });
+        
+        // Formulário de cadastro
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            // Validações
+            if (!name || !email || !password || !confirmPassword) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('As senhas não coincidem!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+            
+            // Simular cadastro bem-sucedido e login automático
+            simulateLogin(email, name);
+        });
+        
+        // Simular login
+        function simulateLogin(email, name = 'Usuário') {
+            // Esconder página de planos e mostrar página de quadrinhos
+            plansPage.style.display = 'none';
+            comicsPage.style.display = 'block';
+            
+            // Atualizar avatar do usuário com a primeira letra do nome
+            userAvatar.textContent = name.charAt(0).toUpperCase();
+            
+            // Fechar modal
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Mudar para a aba de login após cadastro
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            tabs[0].classList.add('active');
+            tabContents[0].classList.add('active');
+            
+            // Limpar formulários
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            
+            // Mostrar mensagem de boas-vindas
+            alert(`Bem-vindo(a) ${name}!`);
+        }
+        
+        // Dados de exemplo para quadrinhos
+        const comicsData = {
+            "Batman: O Cavaleiro das Trevas": {
+                cover: "https://via.placeholder.com/1200x500",
+                description: "A obra-prima de Frank Miller que redefiniu o Batman para sempre. Gotham está em perigo e só um Batman mais velho e sombrio pode salvar a cidade.",
+                features: [
+                    "Autor: Frank Miller",
+                    "Ano: 1986",
+                    "Gênero: Super-herói, Ação",
+                    "Páginas: 224"
+                ]
+            },
+            "Homem-Aranha: A Última Caçada": {
+                cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9az9jtGfQoj20u_4hUEeTQXvX9i0W2KPKw&s",
+                description: "Kraven, o Caçador, finalmente derrota o Homem-Aranha em uma das histórias mais sombrias do herói.",
+                features: [
+                    "Autor: J.M. DeMatteis",
+                    "Ano: 1987",
+                    "Gênero: Super-herói, Drama",
+                    "Páginas: 160"
+                ]
+            },
+            "Watchmen": {
+                cover: "https://via.placeholder.com/200x300",
+                description: "Uma revolucionária graphic novel que explora a vida de super-heróis aposentados em um mundo à beira da guerra nuclear.",
+                features: [
+                    "Autor: Alan Moore",
+                    "Ano: 1986",
+                    "Gênero: Super-herói, Drama",
+                    "Páginas: 416"
+                ]
+            }
+        };
+        
+        // Função para abrir o modal Netflix
+        function openComicModal(title) {
+            const data = comicsData[title];
+            if (!data) {
+                alert('Quadrinho não encontrado');
+                return;
+            }
+            
+            document.getElementById('netflixTitle').textContent = title;
+            document.getElementById('netflixDescription').textContent = data.description;
+            document.getElementById('netflixHero').style.backgroundImage = `url(${data.cover})`;
+            document.getElementById('netflixModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Resetar abas para a primeira
+            document.querySelectorAll('.netflix-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.netflix-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.netflix-tab').classList.add('active');
+            document.querySelector('.netflix-tab-content').classList.add('active');
+        }
+
+        // Fechar modal Netflix
+        document.getElementById('netflixCloseBtn').onclick = function() {
+            document.getElementById('netflixModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        // Trocar entre abas no modal Netflix
+        document.querySelectorAll('.netflix-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                document.querySelectorAll('.netflix-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.netflix-tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(e) {
+            const netflixModal = document.getElementById('netflixModal');
+            if (e.target === netflixModal) {
+                netflixModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Clique nos cards para abrir o modal Netflix
+        document.querySelectorAll('.comic-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const title = card.querySelector('.comic-title');
+                if (title) openComicModal(title.textContent.trim());
+            });
+        });
+
+        // Clique no destaque para abrir o modal Netflix
+        document.querySelector('.featured-comic').addEventListener('click', function(e) {
+            e.preventDefault();
+            const title = document.querySelector('.featured-title');
+            if (title) openComicModal(title.textContent.trim());
+        });
+
+        // Botão "Ler agora" no destaque
+        document.querySelector('.featured-actions .btn-primary').addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('Redirecionando para o leitor...');
+            // window.location.href = 'leitor.html?comic=batman-cavaleiro-das-trevas';
+        });
+
+        // Botão "Minha lista" no destaque
+        document.querySelector('.featured-actions .btn-outline').addEventListener('click', function(e) {
+            e.stopPropagation();
+            alert('Adicionado à sua lista!');
+        });
+
+        // Categorias - filtro
+        document.querySelectorAll('.category').forEach(category => {
+            category.addEventListener('click', function() {
+                document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                // Aqui iria a lógica para filtrar os quadrinhos
+            });
+        });
+
+        // Barra de pesquisa
+        document.querySelector('.search-bar button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-bar input').value;
+            if (searchTerm) {
+                alert(`Buscando por: ${searchTerm}`);
+                // Aqui iria a lógica de busca
+            }
+        });
+
+        // Permitir busca ao pressionar Enter
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-bar button').click();
+            }
+        });
+    </script>
 </body>
 </html>
