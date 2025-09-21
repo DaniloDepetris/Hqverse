@@ -119,16 +119,9 @@
     padding: 10px;
 }
     
-        .user-avatar {
+ .user-avatar {
+    position: relative;
     cursor: pointer;
-    width: 45px;
-    height: 45px;
-    background: var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
 }
 
 .user-dropdown {
@@ -160,7 +153,6 @@
 .user-avatar:hover .user-dropdown {
     display: block;
 }
-
         
         .comics-section {
             margin: 40px 0;
@@ -513,6 +505,8 @@
             
             .comic-card {
                 min-width: 150px;
+                display: flex;
+                flex-direction: column;
             }
             
             .comic-cover {
