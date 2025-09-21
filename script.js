@@ -159,39 +159,46 @@ document.querySelector('.featured-actions .btn-outline').addEventListener('click
             }
         });
     }
-    
-    // Controle do tema claro/escuro
-    const themeToggle = document.getElementById('themeToggle');
-    
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('light-theme');
-            
-            if (document.body.classList.contains('light-theme')) {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        });
-    }
-    
-    // Detecção de redimensionamento para debug
-    function logLayoutChange() {
-        const width = window.innerWidth;
-        let layoutType = "";
+    // Gerenciador de tema claro/escuro
+        const themeToggle = document.getElementById('themeToggle');
+        const themeStatus = document.getElementById('themeStatus');
+        const body = document.body;
         
-        if (width >= 1024) {
-            layoutType = "Desktop (>= 1024px)";
-        } else if (width >= 768) {
-            layoutType = "Tablet (768px - 1023px)";
-        } else if (width >= 576) {
-            layoutType = "Smartphone Grande (576px - 767px)";
+        // Verificar se há uma preferência salva
+        const savedTheme = localStorage.getItem('theme');
+        
+        // Aplicar tema salvo ou padrão
+        if (savedTheme === 'light-theme') {
+            body.classList.add('light-theme');
+            themeStatus.textContent = 'Modo Claro';
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         } else {
-            layoutType = "Smartphone Pequeno (< 576px)";
+            body.classList.remove('light-theme');
+            themeStatus.textContent = 'Modo Escuro';
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
         }
         
-        console.log(`Layout: ${layoutType} - Largura: ${width}px`);
-    }
-    
-    window.addEventListener('resize', logLayoutChange);
-    logLayoutChange();
+        // Alternar tema
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            
+            // Salvar preferência
+            if (body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light-theme');
+                themeStatus.textContent = 'Modo Claro';
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('theme', 'dark-theme');
+                themeStatus.textContent = 'Modo Escuro';
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            // Efeito de confirmação
+            themeStatus.style.opacity = '1';
+            setTimeout(() => {
+                themeStatus.style.opacity = '0.7';
+            }, 1000);
+        });
+        
+        // Debug: Log para verificar se o script está carregando
+        console.log('Script de tema carregado com sucesso!');
