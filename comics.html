@@ -7,20 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Página Inicial -->
-    <div class="container" id="plansPage">
-        <header>
-            <a href="#" class="logo">HQ VERSO</a>
-            <a href="#" class="btn btn-outline" id="loginBtn">Entrar</a>
-        </header>
-        
-        <section class="hero">
-            <h1>Quadrinhos ilimitados online</h1>
-            <p>Assista onde quiser. Cancele quando quiser.</p>
-            <p>Pronto para mergulhar no universo HQ Verso? Faça seu login ou cadastro.</p>
-        </section>
-    </div>
-    
     <!-- Página de Quadrinhos (Após login) -->
     <div class="container comics-page" id="comicsPage">
         <header>
@@ -30,7 +16,13 @@
                     <input type="text" placeholder="Buscar quadrinhos...">
                     <button><i class="fas fa-search"></i></button>
                 </div>
-                <div class="user-avatar" id="userAvatar">U</div>
+               <div class="user-avatar" id="userAvatar">U
+    <div class="user-dropdown">
+        <a href="perfil.html">Meu Perfil</a>
+        <a href="detection.html">Informações do Navegador</a>
+        <a href="index.html">Sair</a>
+    </div>
+</div>
             </div>
         </header>
         
@@ -44,7 +36,7 @@
             <div class="category">Favoritos</div>
         </div>
         
-        <div class="featured-comic" style="background-image: url('https://via.placeholder.com/1200x500')">
+        <div class="featured-comic" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_1OXqNiK7qA0H461zQkADUkI6EwQIiExA3w&s')">
             <div class="featured-overlay">
                 <h2 class="featured-title">Batman: O Cavaleiro das Trevas</h2>
                 <p>A obra-prima de Frank Miller que redefiniu o Batman para sempre.</p>
@@ -215,210 +207,24 @@
                         <div class="comic-meta">2016</div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal de Login/Cadastro -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            
-            <div class="tabs">
-                <div class="tab active" data-tab="login">Entrar</div>
-                <div class="tab" data-tab="signup">Cadastrar</div>
-            </div>
-            
-            <div class="tab-content active" id="login">
-                <h2>Entrar na HQ Verso</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Senha</label>
-                        <input type="password" id="loginPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                </form>
-            </div>
-            
-            <div class="tab-content" id="signup">
-                <h2>Criar conta na HQ Verso</h2>
-                <form id="signupForm">
-                    <div class="form-group">
-                        <label for="signupName">Nome</label>
-                        <input type="text" id="signupName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupEmail">Email</label>
-                        <input type="email" id="signupEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPassword">Senha</label>
-                        <input type="password" id="signupPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupConfirmPassword">Confirmar Senha</label>
-                        <input type="password" id="signupConfirmPassword" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal no estilo Netflix -->
-    <div class="netflix-modal" id="netflixModal">
-        <button class="netflix-close-btn" id="netflixCloseBtn">&times;</button>
-        <div class="netflix-modal-content">
-            <div class="netflix-hero" id="netflixHero">
-                <div class="netflix-hero-info">
-                    <h1 class="netflix-hero-title" id="netflixTitle">Batman: O Cavaleiro das Trevas</h1>
-                    <div class="netflix-hero-actions">
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play"></i> Ler Agora
-                        </button>
-                        <button class="btn btn-outline">
-                            <i class="fas fa-plus"></i> Minha Lista
-                        </button>
-                    </div>
-                    <div class="netflix-metadata">
-                        <span class="netflix-match">98% relevante</span>
-                        <span class="netflix-age-rating">16+</span>
-                        <span>2023</span>
-                        <span>4 volumes</span>
-                    </div>
-                    <p class="netflix-hero-description" id="netflixDescription">
-                        A obra-prima de Frank Miller que redefiniu o Batman para sempre. Gotham está em perigo e só um Batman mais velho e sombrio pode salvar a cidade.
-                    </p>
-                </div>
-            </div>
-
-            <div class="netflix-tabs">
-                <div class="netflix-tab active" data-tab="about">Sobre</div>
-                <div class="netflix-tab" data-tab="volumes">Volumes</div>
-                <div class="netflix-tab" data-tab="details">Detalhes</div>
-            </div>
-
-            <div class="netflix-tab-content active" id="about">
-                <div class="netflix-section">
-                    <h3 class="netflix-section-title">Elenco</h3>
-                    <div class="netflix-cast">
-                        <div class="netflix-cast-item">
-                            <img src="https://via.placeholder.com/100x100" alt="Frank Miller" class="netflix-cast-photo">
-                            <div class="netflix-cast-name">Frank Miller</div>
-                            <div class="netflix-cast-character">Escritor</div>
-                        </div>
-                        <div class="netflix-cast-item">
-                            <img src="https://via.placeholder.com/100x100" alt="Klaus Janson" class="netflix-cast-photo">
-                            <div class="netflix-cast-name">Klaus Janson</div>
-                            <div class="netflix-cast-character">Artista</div>
-                        </div>
-                        <div class="netflix-cast-item">
-                            <img src="https://via.placeholder.com/100x100" alt="Lynn Varley" class="netflix-cast-photo">
-                            <div class="netflix-cast-name">Lynn Varley</div>
-                            <div class="netflix-cast-character">Colorista</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="netflix-section">
-                    <h3 class="netflix-section-title">Mais como este</h3>
-                    <div class="comics-carousel">
-                        <div class="comic-card">
-                            <img src="https://via.placeholder.com/200x300" alt="Batman: Ano Um" class="comic-cover">
-                            <div class="comic-info">
-                                <div class="comic-title">Batman: Ano Um</div>
-                                <div class="comic-meta">Frank Miller</div>
-                            </div>
-                        </div>
-                        <div class="comic-card">
-                            <img src="https://via.placeholder.com/200x300" alt="Batman: O Longo Dia das Bruxas" class="comic-cover">
-                            <div class="comic-info">
-                                <div class="comic-title">Batman: O Longo Dia das Bruxas</div>
-                                <div class="comic-meta">Jeph Loeb</div>
-                            </div>
-                        </div>
-                        <div class="comic-card">
-                            <img src="https://via.placeholder.com/200x300" alt="Batman: A Piada Mortal" class="comic-cover">
-                            <div class="comic-info">
-                                <div class="comic-title">Batman: A Piada Mortal</div>
-                                <div class="comic-meta">Alan Moore</div>
-                            </div>
-                        </div>
-                        <div class="comic-card">
-                            <img src="https://via.placeholder.com/200x300" alt="Batman: Silêncio" class="comic-cover">
-                            <div class="comic-info">
-                                <div class="comic-title">Batman: Silêncio</div>
-                                <div class="comic-meta">Jeph Loeb</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="netflix-tab-content" id="volumes">
-                <div class="netflix-section">
-                    <h3 class="netflix-section-title">Volumes</h3>
-                    <div class="netflix-episodes">
-                        <div class="netflix-episode">
-                            <img src="https://via.placeholder.com/300x150" alt="Volume 1" class="netflix-episode-thumbnail">
-                            <div class="netflix-episode-info">
-                                <h4 class="netflix-episode-title">Volume 1: O Cavaleiro das Trevas</h4>
-                                <p class="netflix-episode-description">
-                                    Batman retorna após 10 anos de aposentadoria para enfrentar uma gangue de mutantes que aterroriza Gotham City.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="netflix-episode">
-                            <img src="https://via.placeholder.com/300x150" alt="Volume 2" class="netflix-episode-thumbnail">
-                            <div class="netflix-episode-info">
-                                <h4 class="netflix-episode-title">Volume 2: A Queda do Morcego</h4>
-                                <p class="netflix-episode-description">
-                                    Batman enfrenta o Coringa em um confronto final que mudará para sempre sua relação com o arqui-inimigo.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="netflix-tab-content" id="details">
-                <div class="netflix-section">
-                    <h3 class="netflix-section-title">Detalhes</h3>
-                    <div class="netflix-more-like-this">
-                        <div>
-                            <strong>Editora:</strong> DC Comics
-                        </div>
-                        <div>
-                            <strong>Data de publicação:</strong> 1986
-                        </div>
-                        <div>
-                            <strong>Páginas:</strong> 224
-                        </div>
-                        <div>
-                            <strong>Formato:</strong> Graphic Novel
-                        </div>
-                        <div>
-                            <strong>Gêneros:</strong> Super-herói, Ação, Drama
-                        </div>
-                        <div>
-                            <strong>Prêmios:</strong> Eisner Award, Harvey Award
-                        </div>
+                <div class="comic-card">
+                    <img src="https://lh3.googleusercontent.com/proxy/9y2rp6F2x4dSCvFkZoz847oXtBE8IP0mscS0W0SkYpRtdub4qCQRCzj-Qwfgd4BWQq6EtqSmr7edCB_rNckNCs8pGT8jFx0HdMknRmb_1EmPWIb5zuujbw" alt="Batman: Silêncio" class="comic-cover">
+                    <div class="comic-info">
+                        <div class="comic-title">Batman: Silêncio</div>
+                        <div class="comic-meta">Jeph Loeb</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js">
-       
-// Verificar se o usuário está logado
-if (!localStorage.getItem('usuarioLogado')) {
-    window.location.href = 'login.html';
-}
-    </script>
+    <div style="position: fixed; bottom: 10px; right: 10px; z-index: 1000;">
+    <a href="detection.html" style="color: #e94560; text-decoration: none; font-size: 12px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 3px;">
+        <i class="fas fa-info-circle"></i> Info Navegador
+    </a>
+</div>
+
+    <script src="script.js"></script>
+    <script src="navigation.js"></script>
 </body>
 </html>
