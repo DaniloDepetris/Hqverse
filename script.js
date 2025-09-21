@@ -117,6 +117,22 @@ document.querySelectorAll('.comic-card').forEach(card => {
 });
 
 // Botão "Ler agora" no destaque
+// Alternância de tema claro/escuro
+const themeToggle = document.getElementById('themeToggle');
+let darkTheme = true;
+
+themeToggle.addEventListener('click', function() {
+    darkTheme = !darkTheme;
+    if (darkTheme) {
+        document.body.style.backgroundColor = '#16213e';
+        document.body.style.color = '#f6f6f6';
+        themeToggle.textContent = '🌙';
+    } else {
+        document.body.style.backgroundColor = '#f6f6f6';
+        document.body.style.color = '#16213e';
+        themeToggle.textContent = '☀️';
+    }
+});
 document.querySelector('.featured-actions .btn-primary').addEventListener('click', function(e) {
     e.stopPropagation();
     alert('Redirecionando para o leitor...');
@@ -127,3 +143,55 @@ document.querySelector('.featured-actions .btn-outline').addEventListener('click
     e.stopPropagation();
     alert('Adicionado à sua lista!');
 });
+
+// Controle do menu mobile
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const searchBar = document.getElementById('searchBar');
+    
+    if (mobileMenuBtn && searchBar) {
+        mobileMenuBtn.addEventListener('click', function() {
+            searchBar.classList.toggle('active');
+            
+            if (searchBar.classList.contains('active')) {
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+    }
+    
+    // Controle do tema claro/escuro
+    const themeToggle = document.getElementById('themeToggle');
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+    }
+    
+    // Detecção de redimensionamento para debug
+    function logLayoutChange() {
+        const width = window.innerWidth;
+        let layoutType = "";
+        
+        if (width >= 1024) {
+            layoutType = "Desktop (>= 1024px)";
+        } else if (width >= 768) {
+            layoutType = "Tablet (768px - 1023px)";
+        } else if (width >= 576) {
+            layoutType = "Smartphone Grande (576px - 767px)";
+        } else {
+            layoutType = "Smartphone Pequeno (< 576px)";
+        }
+        
+        console.log(`Layout: ${layoutType} - Largura: ${width}px`);
+    }
+    
+    window.addEventListener('resize', logLayoutChange);
+    logLayoutChange();
