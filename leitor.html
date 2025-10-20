@@ -2,587 +2,201 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leitor de Quadrinhos - HQ Verso</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Leitor de Quadrinhos</title>
     <style>
-        :root {
-            --primary: #e94560;
-            --secondary: #0f3460;
-            --dark: #18122b;
-            --darker: #0f0a1a;
-            --light: #f6f6f6;
-            --gray: #b2bec3;
-        }
-        
         body {
-            background: var(--darker);
-            color: var(--light);
+            background: #18122b;
+            color: #f6f6f6;
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            overflow-x: hidden;
         }
-        
         .reader-header {
-            background: var(--secondary);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: #0f3460;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+            color: #e94560;
+            letter-spacing: 2px;
         }
-        
-        .reader-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-        }
-        
-        .reader-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .reader-btn {
-            padding: 8px 15px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-        }
-        
-        .reader-btn:hover {
-            background: #d13354;
-            transform: translateY(-1px);
-        }
-        
-        .reader-btn.secondary {
-            background: transparent;
-            border: 1px solid var(--light);
-        }
-        
-        .reader-btn.secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
         .comic-pages {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 20px 0 60px;
-            padding: 0 10px;
+            margin: 30px 0;
         }
-        
         .comic-page-img {
             width: 90vw;
-            max-width: 800px;
-            margin-bottom: 20px;
+            max-width: 700px;
+            margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
-            cursor: zoom-in;
         }
-        
-        .comic-page-img.zoomed {
-            transform: scale(1.5);
-            cursor: zoom-out;
-            z-index: 10;
-            position: relative;
-            margin: 20px auto;
-        }
-        
-        .page-navigation {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--secondary);
+        .back-btn {
+            display: inline-block;
+            margin: 20px;
             padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 50;
-        }
-        
-        .page-info {
-            color: var(--light);
-            font-weight: bold;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .nav-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
+            background: #e94560;
+            color: #fff;
             border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .nav-btn:hover {
-            background: #d13354;
-            transform: scale(1.1);
-        }
-        
-        .nav-btn:disabled {
-            background: var(--gray);
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .fullscreen-btn {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 20;
-        }
-        
-        .thumbnail-view {
-            position: fixed;
-            bottom: 70px;
-            left: 0;
-            right: 0;
-            background: rgba(15, 52, 96, 0.9);
-            padding: 15px;
-            z-index: 30;
-            display: none;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        .thumbnail {
-            width: 80px;
-            height: 120px;
-            object-fit: cover;
-            margin-right: 10px;
             border-radius: 4px;
-            border: 2px solid transparent;
+            font-weight: bold;
+            text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        
-        .thumbnail:hover {
-            transform: scale(1.05);
-            border-color: var(--primary);
+        .read-now-btn {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
         }
-        
-        .thumbnail.active {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-        }
-        
-        .loading {
+        .page-list {
+            width: 90vw;
+            max-width: 700px;
+            margin: 10px auto 40px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            color: var(--gray);
+            flex-direction: column;
+            gap: 8px;
         }
-        
-        .loading-spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary);
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
+        .page-link {
+            display: block;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            font-size: 0.95rem;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .reader-title {
-                font-size: 1.2rem;
-                max-width: 60%;
-            }
-            
-            .reader-btn {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
-            
-            .nav-btn {
-                width: 35px;
-                height: 35px;
-            }
-            
-            .thumbnail {
-                width: 60px;
-                height: 90px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .reader-header {
-                flex-direction: column;
-                gap: 10px;
-                padding: 10px;
-            }
-            
-            .reader-title {
-                max-width: 100%;
-                text-align: center;
-            }
-            
-            .reader-controls {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .comic-page-img {
-                width: 95vw;
-            }
+        .page-link.current {
+            background: linear-gradient(90deg,#e94560,#ff6b81);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(233,69,96,0.28);
         }
     </style>
 </head>
 <body>
-    <header class="reader-header">
-        <h1 class="reader-title" id="readerTitle">Carregando...</h1>
-        <div class="reader-controls">
-            <button class="reader-btn secondary" id="thumbnailsBtn">
-                <i class="fas fa-th"></i> Miniatura
-            </button>
-            <button class="reader-btn" id="fullscreenBtn">
-                <i class="fas fa-expand"></i> Tela Cheia
-            </button>
-            <a href="hqverse.html" class="reader-btn secondary">
-                <i class="fas fa-arrow-left"></i> Biblioteca
-            </a>
-        </div>
-    </header>
-    
-    <button class="fullscreen-btn" id="fsCloseBtn" style="display: none;">
-        <i class="fas fa-times"></i>
-    </button>
-    
+   <div class="reader-header">
+    <span id="readerTitleText">Título do Quadrinho</span>
+    <a href="detection.html" style="font-size: 14px; margin-left: 20px; color: #fff; text-decoration: underline;">
+        Info do Navegador
+    </a>
+</div>
     <div class="comic-pages" id="comicPages">
-        <div class="loading">
-            <div class="loading-spinner"></div>
-            Carregando quadrinho...
-        </div>
+        <!-- As páginas do quadrinho serão inseridas aqui -->
     </div>
-    
-    <div class="thumbnail-view" id="thumbnailView">
-        <!-- Miniaturas serão inseridas aqui -->
+    <div class="page-list" id="pageList" aria-label="Lista de páginas">
+        <!-- Lista clicável de páginas (Página 1, Página 2...) -->
     </div>
-    
-    <div class="page-navigation">
-        <div class="page-info" id="pageInfo">Página 1 de 1</div>
-        <div class="nav-buttons">
-            <button class="nav-btn" id="prevPageBtn" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="nav-btn" id="nextPageBtn">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </div>
-    
+    <a href="comics.html" class="back-btn">Voltar para a Biblioteca</a>
+    <button class="read-now-btn" id="readNowBtn">Ler agora</button>
     <script>
-        // Dados dos quadrinhos (exemplo)
-        const comics = {
-            "Batman O Cavaleiro das Trevas": {
-                title: "Batman: O Cavaleiro das Trevas",
-                pages: [
-                    "https://via.placeholder.com/800x1200/333/fff?text=P%C3%A1gina+1",
-                    "https://via.placeholder.com/800x1200/555/fff?text=P%C3%A1gina+2",
-                    "https://via.placeholder.com/800x1200/777/fff?text=P%C3%A1gina+3",
-                    "https://via.placeholder.com/800x1200/999/fff?text=P%C3%A1gina+4",
-                    "https://via.placeholder.com/800x1200/bbb/fff?text=P%C3%A1gina+5"
-                ]
-            },
-            "Watchmen": {
-                title: "Watchmen",
-                pages: [
-                    "https://via.placeholder.com/800x1200/222/fff?text=Watchmen+1",
-                    "https://via.placeholder.com/800x1200/444/fff?text=Watchmen+2",
-                    "https://via.placeholder.com/800x1200/666/fff?text=Watchmen+3"
-                ]
-            }
-        };
-        
-        // Estado do leitor
-        const state = {
-            currentComic: null,
-            currentPage: 0,
-            totalPages: 0,
-            isZoomed: false,
-            isFullscreen: false,
-            thumbnailsVisible: false
-        };
-        
-        // Elementos DOM
-        const elements = {
-            title: document.getElementById('readerTitle'),
-            pagesContainer: document.getElementById('comicPages'),
-            thumbnailView: document.getElementById('thumbnailView'),
-            pageInfo: document.getElementById('pageInfo'),
-            prevPageBtn: document.getElementById('prevPageBtn'),
-            nextPageBtn: document.getElementById('nextPageBtn'),
-            fullscreenBtn: document.getElementById('fullscreenBtn'),
-            fsCloseBtn: document.getElementById('fsCloseBtn'),
-            thumbnailsBtn: document.getElementById('thumbnailsBtn')
-        };
-        
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', () => {
-            loadComic();
-            setupEventListeners();
-        });
-        
-       
-       // No leitor.html, modifique a função loadComic
-async function loadComic() {
-    const params = new URLSearchParams(window.location.search);
-    const comicId = params.get('id');
-    
-    if (!comicId) {
-        elements.pagesContainer.innerHTML = "<p style='color: var(--primary); text-align: center; padding: 50px;'>Quadrinho não especificado.</p>";
-        elements.title.textContent = "Quadrinho não especificado";
-        return;
-    }
-    
-    try {
-        const response = await fetch(`api/comics.php?action=single&id=${comicId}`);
-        const data = await response.json();
-        
-        if (data.success) {
-            state.currentComic = data.comic;
-            elements.title.textContent = state.currentComic.title;
-            state.totalPages = state.currentComic.pages.length;
-            renderPages();
-            renderThumbnails();
-            updatePageInfo();
-            loadReadingProgress();
-        } else {
-            elements.pagesContainer.innerHTML = `<p style='color: var(--primary); text-align: center; padding: 50px;'>${data.message}</p>`;
-            elements.title.textContent = "Quadrinho não encontrado";
-        }
-    } catch (error) {
-        console.error('Erro ao carregar quadrinho:', error);
-        elements.pagesContainer.innerHTML = "<p style='color: var(--primary); text-align: center; padding: 50px;'>Erro ao carregar quadrinho.</p>";
-        elements.title.textContent = "Erro";
-    }
-}
-        
-        // Renderiza as páginas do quadrinho
-        function renderPages() {
-            elements.pagesContainer.innerHTML = '';
-            
-            state.currentComic.pages.forEach((src, index) => {
+        // Ler parâmetros da query string: comic, title, cover
+        const params = new URLSearchParams(window.location.search);
+        const comicId = params.get('comic') || '';
+    // URLSearchParams already returns decoded strings, avoid double-decoding
+    const comicTitle = params.get('title') || 'Quadrinho';
+    const comicCover = params.get('cover') || '';
+
+        // Atualizar título sem remover o link de info do navegador
+        const titleEl = document.getElementById('readerTitleText');
+        if (titleEl) titleEl.textContent = comicTitle;
+
+        // Gerar páginas: se tivermos cover, mostramos como página 1 e adicionamos pages de placeholder
+        const pagesDiv = document.getElementById('comicPages');
+        const pageListDiv = document.getElementById('pageList');
+        const pages = [];
+        if (comicCover) pages.push(comicCover);
+    // adicionar 3 placeholders como exemplo (ajuste conforme seu conteúdo real)
+    // use ASCII-safe text in the placeholder query to avoid encoding issues
+    pages.push('https://via.placeholder.com/700x1000?text=Pagina+1');
+    pages.push('https://via.placeholder.com/700x1000?text=Pagina+2');
+    pages.push('https://via.placeholder.com/700x1000?text=Pagina+3');
+
+        // criar elementos de imagem e lista de navegação
+        const imgs = [];
+        if (pagesDiv && pages.length) {
+            pages.forEach((src, idx) => {
                 const img = document.createElement('img');
-                img.src = src;
                 img.className = 'comic-page-img';
-                img.alt = `Página ${index + 1} de ${state.currentComic.title}`;
-                img.dataset.pageIndex = index;
-                
-                img.addEventListener('click', () => toggleZoom(img));
-                elements.pagesContainer.appendChild(img);
-            });
-            
-            // Scroll para a página atual
-            setTimeout(() => {
-                const currentPageElement = document.querySelector(`.comic-page-img[data-page-index="${state.currentPage}"]`);
-                if (currentPageElement) {
-                    currentPageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
-        }
-        
-        // Renderiza as miniaturas
-        function renderThumbnails() {
-            elements.thumbnailView.innerHTML = '';
-            
-            state.currentComic.pages.forEach((src, index) => {
-                const thumb = document.createElement('img');
-                thumb.src = src;
-                thumb.className = `thumbnail ${index === state.currentPage ? 'active' : ''}`;
-                thumb.alt = `Página ${index + 1}`;
-                thumb.title = `Página ${index + 1}`;
-                thumb.dataset.pageIndex = index;
-                
-                thumb.addEventListener('click', () => {
-                    goToPage(index);
-                    toggleThumbnails();
-                });
-                
-                elements.thumbnailView.appendChild(thumb);
-            });
-        }
-        
-        // Configura os event listeners
-        function setupEventListeners() {
-            // Navegação por botões
-            elements.prevPageBtn.addEventListener('click', () => goToPage(state.currentPage - 1));
-            elements.nextPageBtn.addEventListener('click', () => goToPage(state.currentPage + 1));
-            
-            // Navegação por teclado
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    goToPage(state.currentPage - 1);
-                } else if (e.key === 'ArrowRight') {
-                    goToPage(state.currentPage + 1);
-                } else if (e.key === 'Escape' && state.isFullscreen) {
-                    toggleFullscreen();
+                img.alt = `Página ${idx + 1}`;
+                img.dataset.pageIndex = String(idx);
+                // set placeholder variable and onerror to guarantee a fallback
+                const placeholderSrc = `https://via.placeholder.com/700x1000?text=Pagina+${idx+1}`;
+                img.onerror = () => { if (!img.dataset.broken) { img.dataset.broken = '1'; img.src = placeholderSrc; } };
+                img.src = src || placeholderSrc;
+                pagesDiv.appendChild(img);
+                imgs.push(img);
+
+                // página na lista
+                if (pageListDiv) {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.className = 'page-link';
+                    a.textContent = `Página ${idx + 1}`;
+                    a.dataset.pageIndex = String(idx);
+                    a.addEventListener('click', (ev) => {
+                        ev.preventDefault();
+                        const i = Number(a.dataset.pageIndex || 0);
+                        const target = imgs[i];
+                        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        updateCurrentPage(i);
+                    });
+                    pageListDiv.appendChild(a);
                 }
             });
-            
-            // Toque nas bordas da tela (para mobile)
-            document.addEventListener('touchstart', (e) => {
-                const touchX = e.touches[0].clientX;
-                const windowWidth = window.innerWidth;
-                
-                if (touchX < windowWidth * 0.2) {
-                    goToPage(state.currentPage - 1);
-                } else if (touchX > windowWidth * 0.8) {
-                    goToPage(state.currentPage + 1);
-                }
-            }, { passive: true });
-            
-            // Controles de tela cheia e miniaturas
-            elements.fullscreenBtn.addEventListener('click', toggleFullscreen);
-            elements.fsCloseBtn.addEventListener('click', toggleFullscreen);
-            elements.thumbnailsBtn.addEventListener('click', toggleThumbnails);
         }
-        
-        // Navega para uma página específica
-        function goToPage(pageIndex) {
-            if (pageIndex < 0 || pageIndex >= state.totalPages) return;
-            
-            state.currentPage = pageIndex;
-            updatePageInfo();
-            
-            const currentPageElement = document.querySelector(`.comic-page-img[data-page-index="${state.currentPage}"]`);
-            if (currentPageElement) {
-                currentPageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // determine initial page from progress param (e.g., '20%' or '20')
+        let initialIndex = 0;
+        const progressRaw = params.get('progress') || '';
+        if (progressRaw) {
+            const n = Number(String(progressRaw).replace('%',''));
+            if (!Number.isNaN(n) && pages.length > 0) {
+                const pct = Math.max(0, Math.min(100, n));
+                // map percent to page index (0..pages.length-1)
+                initialIndex = Math.round((pct / 100) * (pages.length - 1));
             }
-            
-            // Atualiza miniaturas ativas
-            document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
-                thumb.classList.toggle('active', idx === state.currentPage);
+        }
+
+        // helper to mark current page in the list
+        function updateCurrentPage(index) {
+            const links = pageListDiv ? Array.from(pageListDiv.querySelectorAll('.page-link')) : [];
+            links.forEach(l => l.classList.remove('current'));
+            const link = links[index];
+            if (link) link.classList.add('current');
+        }
+
+        // scroll to initial page after layout
+        setTimeout(() => {
+            if (imgs[initialIndex]) {
+                imgs[initialIndex].scrollIntoView({ behavior: 'auto', block: 'start' });
+                updateCurrentPage(initialIndex);
+            }
+        }, 80);
+
+        // Botão 'Ler agora' rola até a primeira página
+        const readNowBtn = document.getElementById('readNowBtn');
+        if (readNowBtn) {
+            readNowBtn.addEventListener('click', () => {
+                const firstPage = document.querySelector('.comic-page-img');
+                if (firstPage) firstPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                updateCurrentPage(0);
             });
-            
-            // Atualiza estado dos botões de navegação
-            elements.prevPageBtn.disabled = state.currentPage === 0;
-            elements.nextPageBtn.disabled = state.currentPage === state.totalPages - 1;
-            
-            // Salva o progresso no localStorage
-            saveReadingProgress();
         }
-        
-        // Atualiza a informação da página atual
-        function updatePageInfo() {
-            elements.pageInfo.textContent = `Página ${state.currentPage + 1} de ${state.totalPages}`;
-        }
-        
-        // Alterna o zoom da página
-        function toggleZoom(imgElement) {
-            if (state.isZoomed) {
-                imgElement.classList.remove('zoomed');
-                state.isZoomed = false;
-            } else {
-                // Remove zoom de qualquer outra página
-                document.querySelectorAll('.comic-page-img.zoomed').forEach(img => {
-                    img.classList.remove('zoomed');
-                });
-                
-                imgElement.classList.add('zoomed');
-                state.isZoomed = true;
-                
-                // Scroll para centralizar a imagem zoomed
-                imgElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-        
-        // Alterna a visualização de miniaturas
-        function toggleThumbnails() {
-            state.thumbnailsVisible = !state.thumbnailsVisible;
-            elements.thumbnailView.style.display = state.thumbnailsVisible ? 'block' : 'none';
-            elements.thumbnailsBtn.innerHTML = state.thumbnailsVisible 
-                ? '<i class="fas fa-times"></i> Fechar' 
-                : '<i class="fas fa-th"></i> Miniatura';
-        }
-        
-        // Alterna o modo de tela cheia
-        function toggleFullscreen() {
-            if (!state.isFullscreen) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`Erro ao tentar tela cheia: ${err.message}`);
-                });
-                elements.fsCloseBtn.style.display = 'flex';
-                state.isFullscreen = true;
-            } else {
-                document.exitFullscreen();
-                elements.fsCloseBtn.style.display = 'none';
-                state.isFullscreen = false;
-            }
-        }
-        
-        // Salva o progresso de leitura
-        function saveReadingProgress() {
-            if (!state.currentComic) return;
-            
-            const progress = {
-                comic: state.currentComic.title,
-                page: state.currentPage,
-                timestamp: Date.now()
-            };
-            
-            localStorage.setItem('hqverso_reading_progress', JSON.stringify(progress));
-        }
-        
-        // Carrega o progresso de leitura (se existir)
-        function loadReadingProgress() {
-            const progress = localStorage.getItem('hqverso_reading_progress');
-            if (!progress) return;
-            
-            try {
-                const data = JSON.parse(progress);
-                if (data.comic === state.currentComic.title && data.page < state.totalPages) {
-                    state.currentPage = data.page;
-                }
-            } catch (e) {
-                console.error('Erro ao carregar progresso:', e);
-            }
+
+        // Botão voltar — mantém compatibilidade com retorno para comics.html
+        const backBtn = document.querySelector('.back-btn');
+        if (backBtn) {
+            backBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'comics.html';
+            });
         }
     </script>
 </body>
